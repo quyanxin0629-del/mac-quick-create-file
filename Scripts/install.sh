@@ -1,6 +1,10 @@
 #!/bin/zsh
 set -euo pipefail
 PROJECT_DIR="${0:A:h:h}"
+case "${1:-}" in
+    ''|--no-refresh-finder) ;;
+    *) print -u2 '用法：./Scripts/install.sh [--no-refresh-finder]'; exit 64 ;;
+esac
 BUILD_PRODUCT="$PROJECT_DIR/build/初页.app"
 INSTALL_TARGET="/Applications/初页.app"
 EXTENSION_ID="io.github.mac-quick-create-file.extension"
@@ -31,10 +35,14 @@ for candidate in "${APP_CANDIDATES[@]}"; do
     done < <(/bin/ps -axo pid=,comm=)
     "$LSREGISTER" -u "$candidate" || true
     backup_index=$((backup_index + 1))
-    mv "$candidate" "$BACKUP_DIR/$backup_index-${candidate:t}"
+    "$PROJECT_DIR/Scripts/archive-app.sh" "$candidate" "$BACKUP_DIR/$backup_index-${candidate:t}.zip"
 done
 mv "$INSTALL_STAGE/初页.app" "$INSTALL_TARGET"
 rmdir "$INSTALL_STAGE"
+# Keep the installed copy as the preferred registration, rather than leaving
+# a second registered build product with the same bundle identifiers.
+pluginkit -r "$BUILD_PRODUCT/Contents/PlugIns/FinderNewFileExtension.appex" >/dev/null 2>&1 || true
+"$LSREGISTER" -u "$BUILD_PRODUCT" >/dev/null 2>&1 || true
 REGISTERED_EXTENSION=""
 for registration_attempt in 1 2 3 4 5; do
     "$LSREGISTER" -f "$INSTALL_TARGET"
@@ -52,4 +60,13 @@ if [[ "$REGISTERED_EXTENSION" != *"$INSTALL_TARGET/Contents/PlugIns/FinderNewFil
 fi
 print -r -- "$REGISTERED_EXTENSION"
 print -r -- "Installed: $INSTALL_TARGET"
-print -r -- '请在本地文件夹空白处右键，从“新建文件”子菜单选择 TXT 或 Markdown。'
+if [[ "${1:-}" == --no-refresh-finder ]]; then
+    print -r -- '已跳过访达刷新。请打开“初页”，点击“完成安装并刷新菜单”或“修复右键菜单”。'
+else
+    print -r -- '正在让访达重新加载扩展；若有文件操作或系统确认，请先完成它。'
+    if ! "$INSTALL_TARGET/Contents/MacOS/FinderNewFile" --refresh-finder; then
+        print -u2 'App 已安装，但访达刷新未完成。请打开“初页”点击“修复右键菜单”重试。'
+        exit 1
+    fi
+fi
+print -r -- '请在本地文件夹空白处右键，从“新建文件”子菜单选择 TXT 或 Markdown 验证。'

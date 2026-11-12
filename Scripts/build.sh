@@ -65,7 +65,7 @@ codesign --verify --deep --strict --verbose=2 "$APP_BUNDLE"
 
 BUILD_PRODUCT="$PROJECT_DIR/build/初页.app"
 if [[ -e "$BUILD_PRODUCT" ]]; then
-    mv "$BUILD_PRODUCT" "$PROJECT_DIR/build/初页.previous.$(date +%Y%m%d%H%M%S).app"
+    "$PROJECT_DIR/Scripts/archive-app.sh" "$BUILD_PRODUCT" "$PROJECT_DIR/build/archived-builds/初页-$(date +%Y%m%d%H%M%S)-$RANDOM.zip"
 fi
 mv "$APP_BUNDLE" "$BUILD_PRODUCT"
 rmdir "$BUILD_STAGE"

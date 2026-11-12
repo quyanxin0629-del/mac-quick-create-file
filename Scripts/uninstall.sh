@@ -21,7 +21,7 @@ for candidate in "${INSTALLED_APPS[@]}"; do
     pluginkit -r "$candidate/Contents/PlugIns/FinderNewFileExtension.appex" || true
     "$LSREGISTER" -u "$candidate" || true
     backup_index=$((backup_index + 1))
-    mv "$candidate" "$BACKUP_DIR/$backup_index-${candidate:t}"
+    "$PROJECT_DIR/Scripts/archive-app.sh" "$candidate" "$BACKUP_DIR/$backup_index-${candidate:t}.zip"
 done
 print -r -- "已停用并保留程序备份：$BACKUP_DIR"
 print -r -- '源码、偏好设置和已创建的文件均保留。'

@@ -11,7 +11,7 @@ final class FinderNewFileExtension: FIFinderSync {
         // Finder calls us only for visible folders. No filesystem scanning,
         // badge generation, polling, file reading, or network access is used.
         FIFinderSyncController.default().directoryURLs = [URL(fileURLWithPath: "/", isDirectory: true)]
-        logger.info("Finder new-file extension initialized")
+        logger.notice("Finder new-file extension initialized")
     }
 
     override func menu(for menuKind: FIMenuKind) -> NSMenu? {
