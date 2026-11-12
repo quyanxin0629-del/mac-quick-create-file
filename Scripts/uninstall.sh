@@ -1,14 +1,14 @@
 #!/bin/zsh
 set -euo pipefail
 PROJECT_DIR="${0:A:h:h}"
-EXTENSION_ID="com.cyrix.finder-new-file.extension"
+EXTENSION_ID="io.github.mac-quick-create-file.extension"
 LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
 APP_CANDIDATES=("/Applications/初页.app" "/Applications/Finder新建文件.app" "$HOME/Applications/初页.app" "$HOME/Applications/Finder新建文件.app")
 INSTALLED_APPS=()
 for candidate in "${APP_CANDIDATES[@]}"; do
     if [[ ! -e "$candidate" ]]; then continue; fi
     CURRENT_ID="$(plutil -extract CFBundleIdentifier raw -o - "$candidate/Contents/Info.plist")"
-    [[ "$CURRENT_ID" == "com.cyrix.finder-new-file" ]] || { print -u2 "同名程序不是本项目，已停止：$candidate"; exit 1; }
+    [[ "$CURRENT_ID" == "io.github.mac-quick-create-file" ]] || { print -u2 "同名程序不是本项目，已停止：$candidate"; exit 1; }
     [[ -w "${candidate:h}" ]] || { print -u2 "没有权限移除此程序，请通过 Finder 卸载：$candidate"; exit 1; }
     INSTALLED_APPS+=("$candidate")
 done

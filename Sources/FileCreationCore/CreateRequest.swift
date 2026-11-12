@@ -1,7 +1,7 @@
 import Foundation
 
 struct CreateRequest: Equatable, Sendable {
-    static let scheme = "cyrix-finder-new-file"
+    static let scheme = "chuye-create-file"
     let directory: URL
     let fileType: NewFileType
     let authorization: String

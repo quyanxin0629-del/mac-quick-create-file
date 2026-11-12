@@ -29,6 +29,8 @@
 
 ZIP 版解压后，将“初页.app”移入 `/Applications`，再打开并启用扩展。
 
+从 1.2.0 或更早版本升级：先在系统设置停用旧扩展，将旧 App 移到废纸篓，再安装新版并重新启用扩展。1.2.1 更新了应用标识；之前设置的默认文件名需按下方命令重新设置。
+
 此版本使用临时签名，尚未经过 Apple 公证。首次打开如果提示无法验证开发者，可在“系统设置 → 隐私与安全”中找到“初页”，选择“仍要打开”。如果系统没有提供允许选项，可使用下方的源码构建方式。
 
 ## 从源码构建与安装
@@ -69,16 +71,18 @@ cd mac-quick-create-file
 
 ## 配置默认名称
 
+`io.github.mac-quick-create-file` 是项目统一使用的应用标识，不会读取或包含你的电脑名称、登录用户名。
+
 设置不带后缀的基础名称：
 
 ```sh
-defaults write com.cyrix.finder-new-file DefaultBaseName -string '笔记'
+defaults write io.github.mac-quick-create-file DefaultBaseName -string '笔记'
 ```
 
 分别创建“笔记.txt”“笔记.md”。恢复默认：
 
 ```sh
-defaults delete com.cyrix.finder-new-file DefaultBaseName
+defaults delete io.github.mac-quick-create-file DefaultBaseName
 ```
 
 ## 扩展文件类型

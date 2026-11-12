@@ -4,7 +4,7 @@ import OSLog
 
 @objc(FinderNewFileExtension)
 final class FinderNewFileExtension: FIFinderSync {
-    private let logger = Logger(subsystem: "com.cyrix.finder-new-file", category: "FinderExtension")
+    private let logger = Logger(subsystem: "io.github.mac-quick-create-file", category: "FinderExtension")
 
     override init() {
         super.init()

@@ -3,7 +3,7 @@ set -euo pipefail
 PROJECT_DIR="${0:A:h:h}"
 BUILD_PRODUCT="$PROJECT_DIR/build/初页.app"
 INSTALL_TARGET="/Applications/初页.app"
-EXTENSION_ID="com.cyrix.finder-new-file.extension"
+EXTENSION_ID="io.github.mac-quick-create-file.extension"
 LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
 APP_CANDIDATES=("$INSTALL_TARGET" "/Applications/Finder新建文件.app" "$HOME/Applications/初页.app" "$HOME/Applications/Finder新建文件.app")
 [[ -d "$BUILD_PRODUCT" ]] || "$PROJECT_DIR/Scripts/build.sh"
@@ -12,7 +12,7 @@ codesign --verify --deep --strict "$BUILD_PRODUCT"
 for candidate in "${APP_CANDIDATES[@]}"; do
     if [[ -e "$candidate" ]]; then
         CURRENT_ID="$(plutil -extract CFBundleIdentifier raw -o - "$candidate/Contents/Info.plist")"
-        [[ "$CURRENT_ID" == "com.cyrix.finder-new-file" ]] || { print -u2 "发现其他同名程序，已停止：$candidate"; exit 1; }
+        [[ "$CURRENT_ID" == "io.github.mac-quick-create-file" ]] || { print -u2 "发现其他同名程序，已停止：$candidate"; exit 1; }
     fi
 done
 INSTALL_STAGE="$(mktemp -d /Applications/.chuye-install.XXXXXX)"
