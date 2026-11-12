@@ -2,14 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
     <key>CFBundleIdentifier</key><string>com.cyrix.finder-new-file.extension</string>
-    <key>CFBundleName</key><string>Finder新建文件</string>
-    <key>CFBundleDisplayName</key><string>Finder新建文件</string>
+    <key>CFBundleName</key><string>初页</string>
+    <key>CFBundleDisplayName</key><string>初页</string>
+    <key>CFBundleIconFile</key><string>AppIcon.icns</string>
     <key>CFBundleExecutable</key><string>FinderNewFileExtension</string>
     <key>CFBundlePackageType</key><string>XPC!</string>
     <key>CFBundleDevelopmentRegion</key><string>zh_CN</string>
     <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
-    <key>CFBundleVersion</key><string>2</string>
-    <key>CFBundleShortVersionString</key><string>1.1.0</string>
+    <key>CFBundleVersion</key><string>3</string>
+    <key>CFBundleShortVersionString</key><string>1.2.0</string>
     <key>CFBundleSupportedPlatforms</key><array><string>MacOSX</string></array>
     <key>LSMinimumSystemVersion</key><string>14.0</string>
     <key>LSUIElement</key><true/>

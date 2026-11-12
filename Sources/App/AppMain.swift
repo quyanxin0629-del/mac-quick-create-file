@@ -64,11 +64,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func showSetup() {
         let alert = NSAlert()
-        alert.messageText = "Finder 新建文件"
+        alert.messageText = "初页"
         let enabled = FIFinderSyncController.isExtensionEnabled
         alert.informativeText = enabled
             ? "扩展已启用。在本地文件夹空白处右键，将鼠标移到“新建文件”，点击 TXT 或 Markdown 即可直接创建。"
-            : "请在系统设置中启用“Finder新建文件”扩展，然后在本地文件夹空白处右键，从“新建文件”子菜单选择 TXT 或 Markdown。"
+            : "请在系统设置中启用“初页”扩展，然后在本地文件夹空白处右键，从“新建文件”子菜单选择 TXT 或 Markdown。"
         alert.addButton(withTitle: enabled ? "完成" : "打开扩展设置")
         alert.addButton(withTitle: "关闭")
         NSApp.activate()
