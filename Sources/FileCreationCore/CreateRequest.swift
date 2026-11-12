@@ -1,6 +1,6 @@
 import Foundation
 
-struct CreateRequest: Equatable {
+struct CreateRequest: Equatable, Sendable {
     static let scheme = "cyrix-finder-new-file"
     let directory: URL
     let fileType: NewFileType

@@ -25,7 +25,7 @@ for candidate in "${APP_CANDIDATES[@]}"; do
     if [[ ! -e "$candidate" ]]; then continue; fi
     pluginkit -r "$candidate/Contents/PlugIns/FinderNewFileExtension.appex" || true
     while read -r extension_pid extension_path; do
-        if [[ "$extension_path" == "$candidate/Contents/PlugIns/FinderNewFileExtension.appex/Contents/MacOS/FinderNewFileExtension" ]]; then
+        if [[ "$extension_path" == "$candidate/Contents/PlugIns/FinderNewFileExtension.appex/Contents/MacOS/FinderNewFileExtension" || "$extension_path" == "$candidate/Contents/MacOS/FinderNewFile" ]]; then
             kill -TERM "$extension_pid" 2>/dev/null || true
         fi
     done < <(/bin/ps -axo pid=,comm=)
@@ -35,9 +35,21 @@ for candidate in "${APP_CANDIDATES[@]}"; do
 done
 mv "$INSTALL_STAGE/初页.app" "$INSTALL_TARGET"
 rmdir "$INSTALL_STAGE"
-"$LSREGISTER" -f "$INSTALL_TARGET"
-pluginkit -a "$INSTALL_TARGET/Contents/PlugIns/FinderNewFileExtension.appex"
-pluginkit -e use -i "$EXTENSION_ID"
-pluginkit -m -A -D -i "$EXTENSION_ID"
+REGISTERED_EXTENSION=""
+for registration_attempt in 1 2 3 4 5; do
+    "$LSREGISTER" -f "$INSTALL_TARGET"
+    pluginkit -a "$INSTALL_TARGET/Contents/PlugIns/FinderNewFileExtension.appex"
+    pluginkit -e use -i "$EXTENSION_ID"
+    sleep 0.2
+    REGISTERED_EXTENSION="$(pluginkit -m -A -D -v -i "$EXTENSION_ID")"
+    if [[ "$REGISTERED_EXTENSION" == *"$INSTALL_TARGET/Contents/PlugIns/FinderNewFileExtension.appex"* ]]; then
+        break
+    fi
+done
+if [[ "$REGISTERED_EXTENSION" != *"$INSTALL_TARGET/Contents/PlugIns/FinderNewFileExtension.appex"* ]]; then
+    print -u2 'App 已复制，但 Finder 扩展暂未完成注册。请打开“初页”，从系统设置手动启用扩展。'
+    exit 1
+fi
+print -r -- "$REGISTERED_EXTENSION"
 print -r -- "Installed: $INSTALL_TARGET"
 print -r -- '请在本地文件夹空白处右键，从“新建文件”子菜单选择 TXT 或 Markdown。'

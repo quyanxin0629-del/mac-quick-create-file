@@ -53,7 +53,7 @@ final class FinderNewFileExtension: FIFinderSync {
             return
         }
         let configuration = NSWorkspace.OpenConfiguration()
-        configuration.activates = false
+        configuration.activates = true
         configuration.addsToRecentItems = false
         // Choose our containing application explicitly instead of trusting an
         // arbitrary application registered for the custom URL scheme.

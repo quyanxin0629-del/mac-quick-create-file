@@ -50,7 +50,9 @@ struct FileCreator: Sendable {
         }
         let directoryFD = directory.withUnsafeFileSystemRepresentation { path -> Int32 in
             guard let path else { return -1 }
-            return Darwin.open(path, O_RDONLY | O_DIRECTORY | O_CLOEXEC)
+            // A directory is only an anchor for openat, not a source of data.
+            // O_EVTONLY avoids requesting access to read its existing contents.
+            return Darwin.open(path, O_EVTONLY | O_DIRECTORY | O_CLOEXEC)
         }
         guard directoryFD >= 0 else { throw FileCreationError.system(errno) }
         defer { Darwin.close(directoryFD) }

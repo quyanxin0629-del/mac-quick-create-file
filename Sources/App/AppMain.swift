@@ -13,11 +13,16 @@ struct FinderNewFileApp {
 }
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    private var didFinishLaunching = false
     private var receivedRequest = false
     private var isHandling = false
     private var pending: [Result<CreateRequest, Error>] = []
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        didFinishLaunching = true
+        DispatchQueue.main.async { [self] in
+            if receivedRequest { handlePendingRequests() }
+        }
         // URL events may arrive immediately after the launch notification.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [self] in
             if !receivedRequest { showSetup() }
@@ -33,17 +38,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func handlePendingRequests() {
-        guard !isHandling else { return }
-        isHandling = true
-        while !pending.isEmpty {
-            switch pending.removeFirst() {
-            case .success(let request): createFile(for: request)
-            case .failure(let error): showError(error)
+        guard didFinishLaunching, !isHandling else { return }
+        guard !pending.isEmpty else {
+            DispatchQueue.main.async { [self] in
+                if !isHandling && pending.isEmpty { NSApp.terminate(nil) }
             }
+            return
         }
-        isHandling = false
-        DispatchQueue.main.async { [self] in
-            if !isHandling && pending.isEmpty { NSApp.terminate(nil) }
+        isHandling = true
+        switch pending.removeFirst() {
+        case .success(let request): createFile(for: request)
+        case .failure(let error):
+            showError(error)
+            isHandling = false
+            handlePendingRequests()
         }
     }
 
@@ -54,11 +62,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let baseName = preferences.string(forKey: "DefaultBaseName") ?? legacyBaseName ?? "未命名"
         var name = request.fileType.fileName(baseName: baseName)
         if (try? FileCreator.validateName(name)) == nil { name = request.fileType.fileName() }
-        do {
-            let createdFile = try FileCreator().create(in: request.directory, named: name)
-            NSWorkspace.shared.activateFileViewerSelecting([createdFile])
-        } catch {
-            showError(error)
+        let requestedName = name
+        // Folder authorization or a slow volume must not block AppKit's launch
+        // and event loop. Keep requests serialized until each IO finishes.
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
+            let result = Result { try FileCreator().create(in: request.directory, named: requestedName) }
+            DispatchQueue.main.async { [self] in
+                switch result {
+                case .success(let createdFile): NSWorkspace.shared.activateFileViewerSelecting([createdFile])
+                case .failure(let error): showError(error)
+                }
+                isHandling = false
+                handlePendingRequests()
+            }
         }
     }
 

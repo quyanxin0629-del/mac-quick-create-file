@@ -9,13 +9,16 @@
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>CFBundleDevelopmentRegion</key><string>zh_CN</string>
     <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
-    <key>CFBundleVersion</key><string>3</string>
+    <key>CFBundleVersion</key><string>4</string>
     <key>CFBundleShortVersionString</key><string>1.2.0</string>
     <key>CFBundleSupportedPlatforms</key><array><string>MacOSX</string></array>
     <key>LSMinimumSystemVersion</key><string>14.0</string>
     <key>LSUIElement</key><true/>
     <key>NSHighResolutionCapable</key><true/>
     <key>NSPrincipalClass</key><string>NSApplication</string>
+    <key>NSDocumentsFolderUsageDescription</key><string>用于按你的选择在文稿文件夹中新建 TXT 或 Markdown 文件。</string>
+    <key>NSDesktopFolderUsageDescription</key><string>用于按你的选择在桌面中新建 TXT 或 Markdown 文件。</string>
+    <key>NSDownloadsFolderUsageDescription</key><string>用于按你的选择在下载文件夹中新建 TXT 或 Markdown 文件。</string>
     <key>CFBundleURLTypes</key><array><dict>
         <key>CFBundleURLName</key><string>com.cyrix.finder-new-file.create</string>
         <key>CFBundleURLSchemes</key><array><string>cyrix-finder-new-file</string></array>
