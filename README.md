@@ -16,7 +16,7 @@
 
 ## 直接下载使用（无需编译）
 
-**[下载初页安装包（DMG）](https://github.com/quyanxin0629-del/mac-quick-create-file/releases/latest/download/Chuye-macOS-universal.dmg)** · [ZIP 备用下载](https://github.com/quyanxin0629-del/mac-quick-create-file/releases/latest/download/Chuye-macOS-universal.zip) · [全部版本](https://github.com/quyanxin0629-del/mac-quick-create-file/releases)
+**[下载初页安装包（DMG）](https://github.com/Cyrix-del/mac-quick-create-file/releases/latest/download/Chuye-macOS-universal.dmg)** · [ZIP 备用下载](https://github.com/Cyrix-del/mac-quick-create-file/releases/latest/download/Chuye-macOS-universal.zip) · [全部版本](https://github.com/Cyrix-del/mac-quick-create-file/releases)
 
 适用于 macOS 14 或更新版本，Universal 安装包包含 Apple Silicon 和 Intel 两种架构。下载安装包不需要 Git、Swift 或 Xcode。
 
@@ -33,6 +33,19 @@ ZIP 版解压后，将“初页.app”移入 `/Applications`，再打开并启�
 
 此版本使用临时签名，尚未经过 Apple 公证。首次打开如果提示无法验证开发者，可在“系统设置 → 隐私与安全”中找到“初页”，选择“仍要打开”。如果系统没有提供允许选项，可使用下方的源码构建方式。
 
+## 让 AI 帮你下载安装
+
+如果你的 AI 助手具有本机终端或电脑操作权限，可以把下面整段提示词发给它，让它协助下载安装。只有聊天能力的 AI 可以提供操作指导，无法直接在你的 Mac 上安装。
+
+```text
+请帮我在这台 Mac 上安装「初页」，它是给 Finder 右键菜单添加 TXT/Markdown 新建功能的开源工具：
+https://github.com/Cyrix-del/mac-quick-create-file
+
+请先阅读仓库 README，确认系统为 macOS 14 或更新版本。有本机终端或电脑操作权限时，请实际执行：从该仓库最新正式 Release 下载 Chuye-macOS-universal.zip 和同版本 SHA256SUMS.txt，核对 SHA-256 后解压，将「初页.app」安装到 /Applications，再打开它并协助启用 Finder 扩展。已有安装时先确认属于本项目并保留可恢复备份。需要密码、安全确认或系统权限时，提示我亲自完成，不要关闭 macOS 安全保护。最后验证右键创建 TXT/Markdown，告知版本、安装路径和验证结果。若你没有本机操作权限，请提供手动安装步骤，并明确说明尚未安装。
+```
+
+Finder 扩展启用、首次打开的安全确认以及受保护文件夹授权，可能仍需要你在系统界面中完成。当前安装包尚未经过 Apple 公证；具体首次打开方法见上方说明。
+
 ## 从源码构建与安装
 
 ### 环境要求
@@ -44,7 +57,7 @@ ZIP 版解压后，将“初页.app”移入 `/Applications`，再打开并启�
 在 Apple Silicon、macOS 27.0.1、Swift 6.4 环境构建并使用；其他系统版本和架构需自行确认兼容性。
 
 ```sh
-git clone https://github.com/quyanxin0629-del/mac-quick-create-file.git
+git clone https://github.com/Cyrix-del/mac-quick-create-file.git
 cd mac-quick-create-file
 ./Scripts/build.sh
 ./Scripts/install.sh
